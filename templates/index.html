@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zakat &amp; Sadaqah Nonprofit Ranking Tool</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<header>
+  <h1>Zakat &amp; Sadaqah Nonprofit Ranking Tool</h1>
+  <p class="subtitle">Find Islamic nonprofits that distribute Zakat — backed by real IRS filing data</p>
+</header>
+
+<main>
+
+  <section class="card" id="zakat-card">
+    <h2>Step 1 — Calculate Your Zakat</h2>
+    <div class="input-row">
+      <label for="wealth">Total zakatable wealth ($)</label>
+      <input type="number" id="wealth" min="0" step="100" placeholder="e.g. 25000">
+    </div>
+    <p class="nisab-note">Built-in nisab threshold: $505.75</p>
+    <button id="calc-zakat-btn" type="button">Calculate Zakat</button>
+    <div id="zakat-result" class="result-box" style="display:none;"></div>
+
+    <div class="input-row" style="margin-top:16px;">
+      <label>
+        <input type="checkbox" id="custom-amount-toggle">
+        Use a custom donation amount instead of my calculated Zakat
+      </label>
+    </div>
+    <div class="input-row" id="custom-amount-row" style="display:none;">
+      <label for="custom-amount">Custom donation amount ($)</label>
+      <input type="number" id="custom-amount" min="0" step="10">
+    </div>
+  </section>
+
+  <section class="card" id="search-card">
+    <h2>Step 2 — Find Nonprofits</h2>
+    <div class="input-row">
+      <label for="cause">Cause / keyword</label>
+      <input type="text" id="cause" placeholder="e.g. refugee, orphan, food, poverty">
+      <div class="search-suggestions" aria-label="Suggested searches">
+        <span class="suggestions-label">Try a search that returns matches:</span>
+        <button class="search-suggestion" type="button" data-search-term="zakat">zakat</button>
+        <button class="search-suggestion" type="button" data-search-term="sadaqah">sadaqah</button>
+        <button class="search-suggestion" type="button" data-search-term="Islamic relief">Islamic relief</button>
+        <button class="search-suggestion" type="button" data-search-term="Muslim relief">Muslim relief</button>
+        <button class="search-suggestion" type="button" data-search-term="Islamic aid">Islamic aid</button>
+        <button class="search-suggestion" type="button" data-search-term="Islamic charity">Islamic charity</button>
+      </div>
+    </div>
+    <div class="input-row">
+      <label for="state">State filter (optional)</label>
+      <input type="text" id="state" maxlength="2" placeholder="e.g. CA">
+    </div>
+    <div class="input-row">
+      <label for="min-efficiency">Minimum efficiency score: <span id="min-efficiency-val">50</span>%</label>
+      <input type="range" id="min-efficiency" min="0" max="100" value="50">
+    </div>
+
+    <div class="zakat-guidance">
+      <h2>Choosing a nonprofit for Zakat</h2>
+      <blockquote>
+        “Charities are for the poor, and the destitute, and those who administer them,
+        and for reconciling hearts, and for freeing slaves, and for those in debt,
+        and in the path of Allah, and for the homeless—an mandate from Allah.
+        Allah is All-Knowing, Most Wise.”
+        <cite>— Surah At-Tawbah 9:60</cite>
+      </blockquote>
+      <p>Look for programs that clearly direct donations to eligible Zakat recipients, such as:</p>
+      <ul>
+        <li>Food, shelter, rent, and essential bills for people in need</li>
+        <li>Debt relief for people who cannot afford qualifying debts</li>
+        <li>Support for stranded travelers who need necessities or help returning home</li>
+        <li>Freedom from bondage, subject to qualified scholarly guidance</li>
+      </ul>
+      <p class="guidance-note">
+        Results are limited to organizations whose public name contains both an
+        Islamic identity signal and a charitable/Zakat distribution signal. A
+        name match does not confirm current Zakat eligibility. Check the specific
+        program and who will receive your donation.
+      </p>
+      <label class="acknowledgement">
+        <input type="checkbox" id="zakat-eligibility-acknowledgement">
+        I understand that I am responsible for verifying that my donation supports eligible Zakat recipients.
+      </label>
+    </div>
+
+    <button id="search-btn" type="button">Find &amp; Rank Nonprofits</button>
+  </section>
+
+  <div id="status-msg" class="status-msg" style="display:none;"></div>
+
+  <section class="card" id="results-card" style="display:none;">
+    <h2>Results — Ranked by Overall Score</h2>
+    <p id="results-summary" class="results-summary"></p>
+    <div id="results-list"></div>
+  </section>
+
+  <section class="card transparency-box">
+    <h2>Model Transparency</h2>
+    <ul>
+      <li><strong>Efficiency Score is a narrow proxy:</strong> it is calculated only as (1 − officer compensation ratio) from the nonprofit's most recent IRS Form 990 filing. It can return 100% for many small organizations when no officer compensation is reported.</li>
+      <li><strong>Additional signals:</strong> Program Revenue Ratio estimates how much income comes from program services, while Fundraising Fee Ratio shows the share of expenses paid for professional fundraising. These provide more discriminating context alongside Efficiency Score.</li>
+      <li><strong>Data can lag 1–2 years:</strong> rankings are based on the most recently processed IRS filing, not real-time finances.</li>
+      <li><strong>Zakat calculation is simplified:</strong> it applies the standard 2.5% rate above nisab, but does not account for business inventory, investments, or debts. Consult a qualified scholar for complex assets.</li>
+      <li><strong>This tool is informational only</strong> and is not a substitute for financial, tax, or religious guidance.</li>
+    </ul>
+  </section>
+
+</main>
+
+<footer>
+  <p>Data source: ProPublica Nonprofit Explorer API (IRS Form 990 filings) · Built for MGSC 300</p>
+</footer>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
